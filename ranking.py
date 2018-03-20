@@ -3,7 +3,7 @@ from trueskill import rate
 from sys import argv
 
 def score(player):
-  return player.mu # - 3 * player.sigma
+  return player.mu - 3 * player.sigma
 
 
 class Ranking:

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strings"
 	"strconv"
 )
@@ -47,6 +48,7 @@ func readScores() map[string]float64 {
 }
 
 func newPicker(score map[string]float64, size int, players []string) picker {
+	sort.Sort(byScore{players, score})
 	return picker{score, size, players, 999999, nil}
 }
 
@@ -99,11 +101,30 @@ func (p *picker) pick(teams int, picked [][]int) {
 
 func (p *picker) print() {
 	for _, team := range p.best {
+		total := 0.0
 		for _, player := range team {
 			fmt.Printf("%v ", p.players[player])
+			total += p.score[p.players[player]]
 		}
-		fmt.Printf("\n")
+		fmt.Printf("%v\n", total)
 	}
+}
+
+type byScore struct {
+	players []string
+	score map[string]float64
+}
+
+func (b byScore) Len() int {
+	return len(b.players)
+}
+
+func (b byScore) Swap(i, j int) {
+	b.players[i], b.players[j] = b.players[j], b.players[i]
+}
+
+func (b byScore) Less(i, j int) bool {
+	return b.score[b.players[i]] > b.score[b.players[j]]
 }
 
 func newSelection(size, max int, picked []int) *selection {

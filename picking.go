@@ -21,6 +21,11 @@ func main() {
 		fmt.Printf("Jogadores sobrando: %v\n", len(players) % teams)
 		return
 	}
+	for _, player := range players {
+		if _, ok := scores[player]; !ok {
+			fmt.Println("Novo jogador:", player)
+		}
+	}
 	picker := newPicker(scores, len(players) / teams, players)
 	picker.pick(teams, nil)
 	picker.print()
